@@ -3,7 +3,6 @@
 namespace Omnibus\Fedex;
 
 use Omnibus\Config;
-use Omnibus\Exception\InvalidConfigException;
 use Omnibus\Fedex\Action\PickupAction;
 use Omnibus\Fedex\Action\RatingAction;
 use Omnibus\Fedex\Action\ShippingAction;
@@ -29,7 +28,7 @@ final class FedexGatewayFactory extends GatewayFactory
             'omnibus.required_options' => ['client_id', 'client_secret', 'account_number'],
             'sandbox' => false,
             'omnibus.api' => function (Config $c) {
-                $http = $this->http ?? (class_exists(HttpClient::class) ? HttpClient::create() : throw new InvalidConfigException('The "fedex" gateway needs symfony/http-client.'));
+                $http = $this->http ?? HttpClient::create();
 
                 return new Api($http, (string) $c['client_id'], (string) $c['client_secret'], (string) $c['account_number'], (bool) $c['sandbox']);
             },
